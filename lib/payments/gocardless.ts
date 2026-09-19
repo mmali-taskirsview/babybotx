@@ -1,0 +1,2 @@
+import { PaymentProvider } from './interface';
+export const gocardlessProvider: PaymentProvider = { id: 'gocardless', name: 'GoCardless', logo: '/payments/gocardless.svg', currencies: ['eur','gbp'], countries: ['GB','DE','FR','NL','ES','IT','PT','IE','DK','SE','NO','FI'], isEnabled: () => !!process.env.GOCARDLESS_KEY, createCheckout: async () => ({ url: 'https://gocardless.com/checkout' }), verifyWebhook: async () => true };

@@ -1,0 +1,52 @@
+# BabyBotX — Complete Build + Test + Launch Prompt
+
+Build, test, and launch a production-ready, secure, multi-language, geo-aware e-commerce website for BabyBotX (https://babybotx.com) that sells SERVICE ROBOTS as one-time purchases.
+
+## Brand
+- Name: BabyBotX
+- Domain: https://babybotx.com
+- Tagline: "Your Home. Your Business. Our Robots."
+- Email: business@babybotx.com / orders@babybotx.com
+- Copyright: © 2026 BabyBotX
+
+## Stack
+Next.js 14 (App Router) + TypeScript (strict), Tailwind CSS + shadcn/ui + Framer Motion, next-intl (i18n), Prisma ORM + PostgreSQL (SQLite local), NextAuth.js, Zustand + React Query + React Hook Form + Zod, Resend + Pino + Sentry, Upstash Redis + Cloudflare Turnstile, bcryptjs + isomorphic-dompurify, Vitest + Testing Library + Playwright + MSW + axe-core, Deploy: Vercel.
+
+## Design
+Futuristic premium (Apple meets Tesla meets iRobot). Colors: Cyan #00E5FF · Navy #0A0E27 · Violet #7C3AED · White #F8FAFC. Fonts: Space Grotesk (headings) · Inter (body). Dark mode default, glassmorphism, responsive, WCAG 2.1 AA, RTL for Arabic.
+
+## Business
+One-time purchases of service robots: cleaning · delivery · security · lawn · kitchen · warehouse.
+
+## Multi-language (12 locales)
+en de fr es it pt nl ar ru ja ko zh — next-intl with /[locale]/... routing. Middleware priority: NEXT_LOCALE cookie > request.geo.country > Accept-Language > en. Country → language map included. Language switcher, translated strings, Intl formatting, hreflang, sitemap, RTL.
+
+## Pages (all /[locale]/...)
+Home · /shop · /shop/[slug] · /categories · /categories/[slug] · /cart · /checkout · /checkout/success · /checkout/cancel · /account · /login · /signup · /reset-password · /about · /contact · /faq · /terms · /privacy · /refund-policy · /shipping-policy
+
+## Payments (worldwide)
+Pluggable providers in /lib/payments/. Launch tier fully working: Stripe · PayPal · Alipay Global · WeChat Pay v3 · BankTransfer. Tier 2 stubs env-gated: Adyen · Razorpay · Paystack · MercadoPago · Mollie · Klarna · Afterpay · PayTabs · Midtrans · Xendit · Wise · GoCardless. Hosted checkout ONLY — PCI SAQ-A. API routes: GET /api/payments/providers?country=XX, POST /api/checkout, POST /api/webhooks/[provider], GET /api/orders/[sessionId].
+
+## Database (Prisma + PostgreSQL)
+Models: User · Category · Product · Order · OrderItem · Review · Address · SecurityLog. i18n JSON fields for name/description. Order.providerRef @unique (idempotency). OrderItem stores name snapshot. SecurityLog audit trail. Seed: 12 products across 6 categories with translations.
+
+## Security (non-negotiable)
+Headers (middleware.ts): HSTS · nosniff · X-Frame-Options DENY · Referrer-Policy · Permissions-Policy · COOP · CORP · strict CSP (Stripe, PayPal, Alipay, WeChat, Turnstile allowlist) · HTTPS only. Auth: httpOnly + secure + sameSite cookies, bcrypt ≥ 12, 12-char min passwords (NIST 800-63B), HIBP check, 5 failed logins → 15-min lockout, email verify before checkout, single-use reset tokens (15-min expiry, hashed), optional TOTP 2FA. Input: Zod .strict() everywhere, NEVER trust client prices, DOMPurify on user content, 100 KB JSON max, MIME magic-byte checks. Payments: hosted checkout only, verify ALL webhook signatures, idempotency via Order.providerRef, status ONLY from verified webhooks, Stripe Radar, redact PII. Rate limit (Upstash Redis): /api/checkout 10/min, /api/auth/* 5/min, /api/contact 3/hr, /api/newsletter 3/hr, /api/reviews 5/hr/user. Turnstile on signup/reset/contact/newsletter. Secrets: env vars only, .env.local gitignored, .env.example placeholders, rotate 90 days, NEXTAUTH_SECRET ≥ 32 bytes, gitleaks pre-commit, no NEXT_PUBLIC_ on secrets. Logs: Pino structured JSON, SecurityLog table, redact PII (u***@example.com), never log passwords/tokens/cards/CVV, Sentry with PII scrubbing. Privacy: cookie consent banner granular opt-in, /privacy page, account deletion soft-delete + 30-day purge, data export /api/account/export (JSON). Email DNS: SPF v=spf1 include:_spf.resend.com ~all, DKIM via Resend, DMARC v=DMARC1; p=quarantine; rua=mailto:business@babybotx.com.
+
+## CI/CD
+GitHub Actions: npm audit, tsc, ESLint-security, gitleaks, missing-translation check. Branch protection on main. Vercel previews password-protected. Production only from main after CI passes.
+
+## File Structure
+/messages/{12 locale}.json · /app/[locale]/(marketing|shop|account|auth)/... · /app/api/{checkout,webhooks/[provider],orders/[id],payments/providers,account/export,account/delete,contact,newsletter} · middleware.ts · i18n/{routing,request,geo-map}.ts · /components/{ui,sections,cart,product,checkout,forms,language-switcher} · /lib/{prisma,auth,utils,validators,email,payments,security,i18n} · /prisma/{schema.prisma,seed.ts} · /public/{brand,products,payments,placeholders,flags} · /tests/{unit,integration,e2e,security,fixtures,utils} · .github/{copilot-instructions.md,dependabot.yml,workflows/security.yml,workflows/test.yml} · .gitleaks.toml · vitest.config.ts · playwright.config.ts
+
+## Test Suite
+Unit (/tests/unit): i18n format, geo-map, validators, sanitize, rate-limit, components. Integration: cart flow, checkout (fake prices rejected, disabled provider rejected), webhook (valid/invalid sig, idempotency), auth (signup/login/lockout/reset), i18n routing. E2E (Playwright): home, shop, checkout-stripe, checkout-paypal, language-switch, account, admin-security, accessibility. Security: rate-limit (11th → 429), webhook-signature (fake → 400), sql-injection, xss, headers. i18n: all 12 locales render, no silent fallbacks, Arabic RTL, currency/dates, hreflang, translated products, localized email.
+
+## Build Order (22 steps)
+1 Scaffold · 2 next-intl · 3 Prisma + seed · 4 Layout + navbar + footer · 5 Homepage · 6 Shop + Product + Cart · 7 Payment abstraction · 8 Stripe + PayPal + webhooks · 9 Alipay · 10 WeChat · 11 BankTransfer · 12 Checkout UI · 13 Success/Cancel + email · 14 Auth + Account + GDPR · 15 Static pages · 16 Tier 2 stubs · 17 Security hardening · 18 Secrets + CI · 19 Monitoring + GDPR + email DNS · 20 SEO · 21 Pre-launch audit · 22 Vercel deploy + DNS
+
+## Test Build Order (T1–T10)
+T1 Deps + configs · T2 Test DB + fixtures · T3 Unit · T4 Integration · T5 Security · T6 i18n · T7 E2E · T8 Accessibility · T9 CI workflow · T10 Full suite + fix + 80% coverage
+
+## Quality Gates
+npm run build succeeds · tsc --noEmit 0 errors · lint 0 errors · npm audit --production 0 high/critical · gitleaks clean · coverage ≥ 80% lib/ + app/api/ · all E2E pass (chromium/firefox/webkit) · 12 locales render · Arabic RTL · Lighthouse ≥ 90 · securityheaders.com A/A+ · SSL Labs A+ · Mozilla Observatory A+ · real Stripe test card works · webhook updates status → paid · confirmation email in locale · VPN DE → German · GDPR export + delete work.

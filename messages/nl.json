@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "Home", "shop": "Winkel", "categories": "Categorieën", "cart": "Winkelwagen", "account": "Account", "login": "Inloggen", "signup": "Registreren" },
+  "hero": { "title": "Jouw Huis. Jouw Bedrijf. Onze Robots.", "subtitle": "Premium service robots.", "cta": "Koop nu" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}

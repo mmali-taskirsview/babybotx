@@ -1,0 +1,4 @@
+repos:
+  - repo: https://github.com/babybotx/babybotx
+    hooks:
+      - id: gitleaks

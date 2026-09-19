@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "ホーム", "shop": "ショップ", "categories": "カテゴリー", "cart": "カート", "account": "アカウント", "login": "ログイン", "signup": "登録" },
+  "hero": { "title": "あなたの家。あなたのビジネス。私たちのロボット。", "subtitle": "プレミアムサービスロボット。", "cta": "購入" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}

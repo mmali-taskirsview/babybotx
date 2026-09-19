@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "홈", "shop": "쇼핑", "categories": "카테고리", "cart": "장바구니", "account": "계정", "login": "로그인", "signup": "가입" },
+  "hero": { "title": "당신의 집. 당신의 사업. 우리의 로봇.", "subtitle": "프리미엄 서비스 로봇.", "cta": "구매" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}

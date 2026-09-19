@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "Home", "shop": "Negozio", "categories": "Categorie", "cart": "Carrello", "account": "Account", "login": "Accedi", "signup": "Registrati" },
+  "hero": { "title": "La Tua Casa. La Tua Azienda. I Nostri Robot.", "subtitle": "Robot di servizio premium.", "cta": "Acquista" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}

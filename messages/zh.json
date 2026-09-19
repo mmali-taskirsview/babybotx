@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "首页", "shop": "商店", "categories": "分类", "cart": "购物车", "account": "账户", "login": "登录", "signup": "注册" },
+  "hero": { "title": "您的家。您的企业。我们的机器人。", "subtitle": "高端服务机器人。", "cta": "立即购买" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}

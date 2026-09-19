@@ -1,0 +1,5 @@
+{
+  "nav": { "home": "Home", "shop": "Shop", "categories": "Categories", "cart": "Cart", "account": "Account", "login": "Login", "signup": "Sign up" },
+  "hero": { "title": "Your Home. Your Business. Our Robots.", "subtitle": "Premium service robots.", "cta": "Shop Now" },
+  "footer": { "copyright": "© 2026 BabyBotX" }
+}
